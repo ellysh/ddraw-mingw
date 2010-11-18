@@ -1,0 +1,28 @@
+MINGW=i586-pc-mingw32
+MINGWLIB=/usr/$(MINGW)/sys-root/mingw/lib
+CC=$(MINGW)-gcc
+LD=$(MINGW)-ld
+CXX=$(MINGW)-g++
+STRIP=$(MINGW)-strip
+WINDRES=$(MINGW)-windres -v
+RANLIB=$(MINGW)-ranlib
+AR=$(MINGW)-ar
+
+# TODO: uncomment me for release
+RELFLAGS=-D_FORTIFY_SOURCE=2 -O2
+#RELFLAGS=
+
+CFLAGS=-Wall -Wno-pointer-sign $(RELFLAGS)
+CXXFLAGS=-Wall $(RELFLAGS)
+
+LDADD=-static-libgcc
+.SUFFIXES: .rc .res .res.o
+
+%.o: %.c
+	$(CC) $(CFLAGS) $(ONLYCFLAGS) -c $< -o $@
+
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+.rc.res.o:
+	$(WINDRES) $^ $@
